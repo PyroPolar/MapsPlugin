@@ -117,7 +117,8 @@ public class Oasis extends BattleMap implements Listener {
             public void run() {
                 if (Bukkit.getWorld(getName()) != null) {
                     block.setType(Material.STATIONARY_WATER);
-                    if (block.getLocation().distanceSquared(p.getLocation()) <= 3) iceTemp(block, p);
+                    if (p.getWorld().getName().equals(getName()))
+                        if (block.getLocation().distanceSquared(p.getLocation()) <= 3) iceTemp(block, p);
                 }
             }
         }.runTaskLater(plugin, 3 * 20L);
@@ -126,6 +127,7 @@ public class Oasis extends BattleMap implements Listener {
     @EventHandler
     public void move(PlayerMoveEvent event) {
         if (!event.getPlayer().getWorld().getName().equals(getName())) return;
+        if (BattlePlayer.getBattlePlayer(event.getPlayer()).isSpectator()) return;
         if (!(event.getPlayer().getItemInHand().getType() == Material.RED_ROSE)) return;
         for (Block block : circle(event.getPlayer().getLocation(), 3, 3, false, true, 0)) {
             if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER) {
